@@ -16,28 +16,28 @@ resource "vercel_project" "frontend_project" {
   framework = "vue"
   environment = [
     {
-      key   = "VUE_APP_OKTA_URI"
-      value = var.okta_uri
+      key    = "VUE_APP_OKTA_URI"
+      value  = var.okta_uri
       target = local.default_env_target
     },
     {
-      key   = "VUE_APP_OKTA_CLIENT_ID"
-      value = var.okta_client_id
+      key    = "VUE_APP_OKTA_CLIENT_ID"
+      value  = var.okta_client_id
       target = local.default_env_target
     },
     {
-      key   = "VUE_APP_OKTA_REDIRECT_URI"
-      value = var.okta_redirect_uri
+      key    = "VUE_APP_OKTA_REDIRECT_URI"
+      value  = var.okta_redirect_uri
       target = local.default_env_target
     },
     {
-      key   = "VUE_APP_BACKEND_URL"
-      value = var.backend_url
+      key    = "VUE_APP_BACKEND_URL"
+      value  = var.backend_url
       target = local.default_env_target
     },
     {
-      key   = "VUE_APP_BACKEND_TIMEOUT"
-      value = "40000"
+      key    = "VUE_APP_BACKEND_TIMEOUT"
+      value  = "40000"
       target = local.default_env_target
     }
   ]
