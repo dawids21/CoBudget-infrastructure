@@ -44,7 +44,7 @@ resource "vercel_project" "frontend" {
 }
 
 resource "vercel_project_domain" "frontend" {
-  domain     = "cobudget.stasiak.xyz"
+  domain     = var.app_domain
   project_id = vercel_project.frontend.id
   team_id    = "dawids21"
 }

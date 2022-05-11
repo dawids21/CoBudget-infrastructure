@@ -38,3 +38,8 @@ variable "heroku_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "app_domain" {
+  description = "Domain of the frontend app"
+  type        = string
+}

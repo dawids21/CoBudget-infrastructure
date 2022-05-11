@@ -1,3 +1,8 @@
+variable "app_domain" {
+  description = "Domain of the frontend app"
+  type        = string
+}
+
 variable "okta_uri" {
   description = "Okta OIDC URI"
   type        = string
