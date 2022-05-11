@@ -1,5 +1,4 @@
 // heroku_addon for database
-// heroku_formation for creating dyno
 
 resource "heroku_app" "backend" {
   name   = "heroku-test"
@@ -18,4 +17,11 @@ resource "heroku_app_config_association" "backend" {
   app_id = heroku_app.backend.id
 
   vars = heroku_config.backend_config_vars.vars
+}
+
+resource "heroku_formation" "backend" {
+  app_id   = heroku_app.backend.id
+  type     = "web"
+  quantity = 1
+  size     = "free"
 }
