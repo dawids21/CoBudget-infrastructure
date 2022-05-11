@@ -6,7 +6,7 @@ locals {
   ]
 }
 
-resource "vercel_project" "frontend_project" {
+resource "vercel_project" "frontend" {
   name    = "co-budget-frontend"
   team_id = "dawids21"
   git_repository = {
@@ -43,13 +43,16 @@ resource "vercel_project" "frontend_project" {
   ]
 }
 
-resource "vercel_project_domain" "frontend_project_domain" {
+resource "vercel_project_domain" "frontend" {
   domain     = "cobudget.stasiak.xyz"
-  project_id = vercel_project.frontend_project.id
+  project_id = vercel_project.frontend.id
   team_id    = "dawids21"
 }
 
 data "vercel_project" "frontend" {
+  depends_on = [
+    vercel_project.frontend
+  ]
   name    = "co-budget-frontend"
   team_id = "dawids21"
 }
