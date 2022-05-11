@@ -1,5 +1,3 @@
-// heroku_addon for database
-
 resource "heroku_app" "backend" {
   name   = "heroku-test"
   region = "eu"
@@ -24,4 +22,10 @@ resource "heroku_formation" "backend" {
   type     = "web"
   quantity = 1
   size     = "free"
+}
+
+resource "heroku_addon" "backend-database" {
+  app_id = heroku_app.backend.id
+  plan   = "hobby-dev"
+  name   = "cobudget-backend-database"
 }
