@@ -22,11 +22,6 @@ variable "vercel_okta_redirect_uri" {
   sensitive   = true
 }
 
-variable "vercel_backend_url" {
-  description = "Backend app url"
-  type        = string
-}
-
 variable "heroku_email" {
   description = "Email to authenticate Heroku API"
   type        = string
