@@ -9,4 +9,7 @@ module "vercel_cobudget_frontend" {
 
 module "heroku_cobudget_backend" {
   source = "./modules/heroku-cobudget-backend"
+
+  frontend_url = module.vercel_cobudget_frontend.frontend_url
+  oauth_issuer = "${var.vercel_okta_uri}/oauth2/default"
 }
