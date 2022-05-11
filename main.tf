@@ -6,3 +6,7 @@ module "vercel_cobudget_frontend" {
   okta_redirect_uri = var.vercel_okta_redirect_uri
   backend_url       = var.vercel_backend_url
 }
+
+module "heroku_cobudget_backend" {
+  source = "./modules/heroku-cobudget-backend"
+}
