@@ -1,5 +1,4 @@
 // heroku_addon for database
-// heroku_app_config_association for linking app with config vars
 // heroku_formation for creating dyno
 
 resource "heroku_app" "backend" {
@@ -13,4 +12,10 @@ resource "heroku_config" "backend_config_vars" {
     "CORS_ORIGINS" = var.frontend_url
     "OAUTH_ISSUER" = var.oauth_issuer
   }
+}
+
+resource "heroku_app_config_association" "backend" {
+  app_id = heroku_app.backend.id
+
+  vars = heroku_config.backend_config_vars.vars
 }
