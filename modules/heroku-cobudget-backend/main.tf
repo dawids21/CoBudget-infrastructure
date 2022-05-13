@@ -1,5 +1,5 @@
 resource "heroku_app" "backend" {
-  name   = "dawids21-heroku-test"
+  name   = "cobudget-backend"
   region = "eu"
 }
 
