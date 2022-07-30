@@ -3,18 +3,13 @@ variable "app_domain" {
   type        = string
 }
 
-variable "okta_uri" {
-  description = "Okta OIDC URI"
+variable "okta_issuer" {
+  description = "Okta OIDC issuer"
   type        = string
 }
 
 variable "okta_client_id" {
   description = "Okta OIDC Client ID"
-  type        = string
-}
-
-variable "okta_redirect_uri" {
-  description = "Okta OIDC redirect URI"
   type        = string
 }
 

@@ -21,17 +21,12 @@ variable "app_domain" {
   type        = string
 }
 
-variable "vercel_okta_uri" {
-  description = "Okta OIDC URI"
+variable "vercel_okta_issuer" {
+  description = "Okta OIDC issuer"
   type        = string
 }
 
 variable "vercel_okta_client_id" {
   description = "Okta OIDC Client ID"
-  type        = string
-}
-
-variable "vercel_okta_redirect_uri" {
-  description = "Okta OIDC redirect URI"
   type        = string
 }
