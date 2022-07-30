@@ -11,5 +11,5 @@ module "heroku_cobudget_backend" {
   source = "./modules/heroku-cobudget-backend"
 
   frontend_url = "https://${var.app_domain}"
-  oauth_issuer = "${var.vercel_okta_issuer}/oauth2/default"
+  oauth_issuer = var.vercel_okta_issuer
 }
