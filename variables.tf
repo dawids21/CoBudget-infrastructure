@@ -36,3 +36,9 @@ variable "okta_api_token" {
   type        = string
   sensitive   = true
 }
+
+variable "okta_prod_user_password" {
+  description = "Password for the production user"
+  type        = string
+  sensitive   = true
+}

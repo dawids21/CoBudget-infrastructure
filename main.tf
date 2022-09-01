@@ -23,4 +23,5 @@ module "okta_cobudget_iaas" {
   ]
   post_logout_redirect_uris = ["http://localhost:3000", "https://cobudget.stasiak.xyz"]
   logo_path                 = "./logo.png"
+  prod_user_password        = var.okta_prod_user_password
 }

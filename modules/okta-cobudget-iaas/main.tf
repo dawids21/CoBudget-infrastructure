@@ -10,6 +10,10 @@ resource "okta_app_oauth" "oauth" {
   response_types             = ["code"]
   logo                       = var.logo_path
   accessibility_self_service = true
+
+  lifecycle {
+    ignore_changes = [groups]
+  }
 }
 
 resource "okta_group" "oauth" {
@@ -26,6 +30,7 @@ resource "okta_user" "admin" {
   login      = "cobudget.prod@stasiak.xyz"
   first_name = "Super"
   last_name  = "User"
+  password   = var.prod_user_password
 }
 
 resource "okta_group_memberships" "oauth" {

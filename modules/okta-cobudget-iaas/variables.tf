@@ -12,3 +12,9 @@ variable "logo_path" {
   description = "Path to logo for app"
   type        = string
 }
+
+variable "prod_user_password" {
+  description = "Password for the production user"
+  type        = string
+  sensitive   = true
+}
