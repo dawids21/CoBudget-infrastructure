@@ -26,11 +26,6 @@ variable "vercel_okta_issuer" {
   type        = string
 }
 
-variable "vercel_okta_client_id" {
-  description = "Okta OIDC Client ID"
-  type        = string
-}
-
 variable "okta_org_name" {
   description = "Name of the Okta organization"
   type        = string
