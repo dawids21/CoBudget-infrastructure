@@ -32,3 +32,9 @@ resource "okta_group_memberships" "oauth" {
   group_id = okta_group.oauth.id
   users    = [okta_user.admin.id]
 }
+
+resource "okta_auth_server_default" "oauth" {
+  name                      = "default"
+  audiences                 = ["api://default"]
+  credentials_rotation_mode = "AUTO"
+}
