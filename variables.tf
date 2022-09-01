@@ -21,11 +21,6 @@ variable "app_domain" {
   type        = string
 }
 
-variable "vercel_okta_issuer" {
-  description = "Okta OIDC issuer"
-  type        = string
-}
-
 variable "okta_org_name" {
   description = "Name of the Okta organization"
   type        = string
