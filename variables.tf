@@ -30,3 +30,19 @@ variable "vercel_okta_client_id" {
   description = "Okta OIDC Client ID"
   type        = string
 }
+
+variable "okta_org_name" {
+  description = "Name of the Okta organization"
+  type        = string
+}
+
+variable "okta_base_url" {
+  description = "Domain of the Okta account"
+  type        = string
+}
+
+variable "okta_api_token" {
+  description = "Token for Okta API"
+  type        = string
+  sensitive   = true
+}

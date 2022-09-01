@@ -8,6 +8,10 @@ terraform {
       source  = "heroku/heroku"
       version = "~> 5.0.2"
     }
+    okta = {
+      source  = "okta/okta"
+      version = "~> 3.35.0"
+    }
   }
 
   required_version = "~> 1.2.0"
@@ -27,4 +31,10 @@ provider "vercel" {
 provider "heroku" {
   email   = var.heroku_email
   api_key = var.heroku_api_key
+}
+
+provider "okta" {
+  org_name  = var.okta_org_name
+  base_url  = var.okta_base_url
+  api_token = var.okta_api_token
 }

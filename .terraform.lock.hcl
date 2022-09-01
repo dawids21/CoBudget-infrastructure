@@ -25,6 +25,28 @@ provider "registry.terraform.io/heroku/heroku" {
   ]
 }
 
+provider "registry.terraform.io/okta/okta" {
+  version     = "3.35.0"
+  constraints = "~> 3.35.0"
+  hashes = [
+    "h1:O9Vb+LbGZHMXEDzWO7ADXxTw8621pA33XdPOYkeiWyc=",
+    "zh:0106eac3bd692f15e98cef37242b983951b4d3ceff7f3fc941b68204db88c2d5",
+    "zh:0745f4409c125409355fc0dc33c11e2e136da79df7555e83829e87d3abadaa14",
+    "zh:0dc36a00b8f72b891472d4e3b04ccb068ebced7bacb89020153ea8d7e57ae8d2",
+    "zh:4da11007e6a02a34096126a85bd13c0d66fb4cc3ec24896f98904107fcaadab3",
+    "zh:5eca0d7b56f90336d662f8196d416a24415ec5757f23140e9b755549f0c5bb4f",
+    "zh:6395fa6fe3b6e295a263ca9bf62c587ff097f3a8b4b0b0d322005aa45dc9d29a",
+    "zh:70d1288924a9e219b3f08a086e251aab4fa2c42490faf69eefbe47ba27e40431",
+    "zh:7de0585a31b53642a374a58f137e05d4b86db2493a8d9774fd1c3eec9989f2f9",
+    "zh:82b1f950c1134eaca119023939d24f40bf31dbf0f944968a2ddf971fad15244b",
+    "zh:c172dbd8a5869b5bd773e3ae2fefb3ec484b5b57beaf1636a63204cef35cad57",
+    "zh:c3d61404b8f74fcd16ac261d745789a6c89646d98020112a2b4813eba021ae7d",
+    "zh:c3ef149455de2479a956f575be4aaeeed293cea0f6a9b64c16da786f2cabb1b4",
+    "zh:c4e8ba83062f65778493f0a8762d7746f769bbd597890e2478f5b84dc68f1644",
+    "zh:d0addde5306134ba666bb20a0810ec031e9f665af209cab30f1cca11ed958312",
+  ]
+}
+
 provider "registry.terraform.io/vercel/vercel" {
   version     = "0.3.0"
   constraints = "~> 0.3.0"

@@ -13,3 +13,7 @@ module "heroku_cobudget_backend" {
   frontend_url = "https://${var.app_domain}"
   oauth_issuer = var.vercel_okta_issuer
 }
+
+module "okta_cobudget_iaas" {
+  source = "./modules/okta-cobudget-iaas"
+}
