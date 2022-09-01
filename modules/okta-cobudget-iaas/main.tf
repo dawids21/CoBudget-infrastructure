@@ -20,3 +20,15 @@ resource "okta_app_group_assignment" "oauth" {
   app_id   = okta_app_oauth.oauth.id
   group_id = okta_group.oauth.id
 }
+
+resource "okta_user" "admin" {
+  email      = "cobudget.prod@stasiak.xyz"
+  login      = "cobudget.prod@stasiak.xyz"
+  first_name = "Super"
+  last_name  = "User"
+}
+
+resource "okta_group_memberships" "oauth" {
+  group_id = okta_group.oauth.id
+  users    = [okta_user.admin.id]
+}
