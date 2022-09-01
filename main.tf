@@ -16,4 +16,11 @@ module "heroku_cobudget_backend" {
 
 module "okta_cobudget_iaas" {
   source = "./modules/okta-cobudget-iaas"
+
+  redirect_uris = [
+    "https://cobudget.stasiak.xyz/login/callback",
+    "http://localhost:3000/login/callback"
+  ]
+  post_logout_redirect_uris = ["http://localhost:3000", "https://cobudget.stasiak.xyz"]
+  logo_path                 = "./logo.png"
 }
