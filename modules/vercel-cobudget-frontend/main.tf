@@ -48,7 +48,7 @@ data "vercel_project" "frontend" {
 }
 
 data "vercel_project_directory" "frontend" {
-  path = "../frontend"
+  path = "../cobudget-frontend"
 }
 
 resource "vercel_deployment" "frontend" {
@@ -57,4 +57,8 @@ resource "vercel_deployment" "frontend" {
   production  = true
   path_prefix = data.vercel_project_directory.frontend.path
   team_id     = "dawids21"
+
+  lifecycle {
+    ignore_changes = [files]
+  }
 }

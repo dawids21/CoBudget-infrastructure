@@ -7,7 +7,7 @@ resource "heroku_build" "backend" {
   app_id = heroku_app.backend.id
 
   source {
-    path = "../backend"
+    path = "../backend-source-terraform"
   }
 }
 
