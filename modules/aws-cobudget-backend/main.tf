@@ -41,3 +41,32 @@ resource "aws_iam_user_policy_attachment" "github_actions_ecr_cobudget" {
 resource "aws_iam_access_key" "github_actions" {
   user = aws_iam_user.github_actions.name
 }
+
+resource "github_repository" "cobudget" {
+  name                 = "CoBudget-backend"
+  allow_merge_commit   = false
+  allow_rebase_merge   = false
+  allow_squash_merge   = false
+  has_downloads        = true
+  has_issues           = true
+  has_projects         = true
+  has_wiki             = true
+  vulnerability_alerts = true
+}
+
+resource "github_repository_environment" "cobudget" {
+  environment = "cobudget-backend"
+  repository  = github_repository.cobudget.name
+}
+
+resource "github_actions_secret" "aws_access_key_id" {
+  repository      = github_repository.cobudget.name
+  secret_name     = "AWS_ACCESS_KEY_ID"
+  plaintext_value = aws_iam_access_key.github_actions.id
+}
+
+resource "github_actions_secret" "aws_access_key_secret" {
+  repository      = github_repository.cobudget.name
+  secret_name     = "AWS_ACCESS_KEY_SECRET"
+  plaintext_value = aws_iam_access_key.github_actions.secret
+}

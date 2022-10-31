@@ -50,6 +50,6 @@ variable "aws_region" {
 
 variable "github_token" {
   description = "Personal access token for GitHub"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
