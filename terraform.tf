@@ -16,6 +16,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 4.0"
+    }
   }
 
   required_version = "~> 1.3.0"
@@ -45,4 +49,8 @@ provider "okta" {
 
 provider "aws" {
   region = var.aws_region
+}
+
+provider "github" {
+  token = var.github_token
 }

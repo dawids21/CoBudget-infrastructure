@@ -47,3 +47,9 @@ variable "aws_region" {
   description = "Region for AWS"
   type        = string
 }
+
+variable "github_token" {
+  description = "Personal access token for GitHub"
+  type = string
+  sensitive = true
+}
