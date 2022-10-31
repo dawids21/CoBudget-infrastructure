@@ -46,19 +46,3 @@ data "vercel_project" "frontend" {
   name    = "co-budget-frontend"
   team_id = "dawids21"
 }
-
-data "vercel_project_directory" "frontend" {
-  path = "../cobudget-frontend"
-}
-
-resource "vercel_deployment" "frontend" {
-  project_id  = data.vercel_project.frontend.id
-  files       = data.vercel_project_directory.frontend.files
-  production  = true
-  path_prefix = data.vercel_project_directory.frontend.path
-  team_id     = "dawids21"
-
-  lifecycle {
-    ignore_changes = [files]
-  }
-}

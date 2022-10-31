@@ -3,14 +3,6 @@ resource "heroku_app" "backend" {
   region = "eu"
 }
 
-resource "heroku_build" "backend" {
-  app_id = heroku_app.backend.id
-
-  source {
-    path = "../backend-source-terraform"
-  }
-}
-
 resource "heroku_config" "backend_config_vars" {
   vars = {
     "APP_PORT"     = "8080"
@@ -23,16 +15,6 @@ resource "heroku_app_config_association" "backend" {
   app_id = heroku_app.backend.id
 
   vars = heroku_config.backend_config_vars.vars
-}
-
-resource "heroku_formation" "backend" {
-  app_id   = heroku_app.backend.id
-  type     = "web"
-  quantity = 1
-  size     = "free"
-  depends_on = [
-    heroku_build.backend
-  ]
 }
 
 resource "heroku_addon" "backend-database" {
