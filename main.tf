@@ -25,3 +25,7 @@ module "okta_cobudget_iaas" {
   logo_path                 = "./logo.png"
   prod_user_password        = var.okta_prod_user_password
 }
+
+module "aws_cobudget_backend" {
+  source = "./modules/aws-cobudget-backend"
+}

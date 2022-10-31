@@ -12,6 +12,10 @@ terraform {
       source  = "okta/okta"
       version = "~> 3.35.0"
     }
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4.0"
+    }
   }
 
   required_version = "~> 1.3.0"
@@ -37,4 +41,8 @@ provider "okta" {
   org_name  = var.okta_org_name
   base_url  = var.okta_base_url
   api_token = var.okta_api_token
+}
+
+provider "aws" {
+  region = var.aws_region
 }

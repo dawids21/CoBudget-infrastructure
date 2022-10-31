@@ -42,3 +42,8 @@ variable "okta_prod_user_password" {
   type        = string
   sensitive   = true
 }
+
+variable "aws_region" {
+  description = "Region for AWS"
+  type = string
+}
