@@ -28,4 +28,5 @@ module "okta_cobudget_iaas" {
 
 module "aws_cobudget_backend" {
   source = "./modules/aws-cobudget-backend"
+  region = var.aws_region
 }
