@@ -53,3 +53,9 @@ variable "github_token" {
   type        = string
   sensitive   = true
 }
+
+variable "db_password" {
+  description = "Password to DB"
+  type        = string
+  sensitive   = true
+}
