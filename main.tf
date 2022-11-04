@@ -4,7 +4,7 @@ module "vercel_cobudget_frontend" {
   app_domain     = var.app_domain
   okta_issuer    = module.okta_cobudget_iaas.okta_issuer
   okta_client_id = module.okta_cobudget_iaas.okta_client_id
-  backend_url    = module.heroku_cobudget_backend.backend_url
+  backend_url    = "https://cobudget-backend.stasiak.xyz/"
 }
 
 module "heroku_cobudget_backend" {
