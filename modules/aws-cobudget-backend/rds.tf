@@ -37,7 +37,7 @@ resource "aws_db_instance" "cobudget" {
 resource "aws_ssm_parameter" "cobudget_jdbc_database_url" {
   name  = "cobudget-jdbc-database-url"
   type  = "SecureString"
-  value = "${aws_db_instance.cobudget.endpoint}:5432/cobudget"
+  value = "jdbc:postgresql://${aws_db_instance.cobudget.endpoint}/${aws_db_instance.cobudget.db_name}"
 }
 
 resource "aws_ssm_parameter" "cobudget_jdbc_database_username" {

@@ -55,6 +55,11 @@ data "aws_ami" "cobudget" {
   }
 }
 
+resource "aws_key_pair" "cobudget" {
+  key_name   = "cobudget"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDV9brHJCm7kD7yJ56DEjhU7sckMLa/wj3tWGuyhHjma0grspV6fyAgPaBzZq1RX0sujlgdIBR4b1i9fIUrcp4OcdZLaxdupJbUvew8BqwWgJnmjuwSvhrrHPdweJK5LIE82SYakM0ptBWpRzaRLGoz9P71ElVRIPtVYDAbHSrHrxy7jX5H+7ExTkKcUDYeGXaeAlzxNM6qDaoPI9APX2MbR/L6HzrwbfiUb6U8jLqJOYghCwwl8A6DjaTBBGqDMDcT5yjMF0Y39hNTfrYzxQ6V6Uq6+WEHLnE+WLUlblvwJtMhfsQvmFQybROsGY5clUa+6pW7V7TAHL8RuG7LufmpvgQK0ci2ummeIYGk6IZQHAl+9HFgnHDqe/ZpTFewnfeb2kpZIweogWpzouAjIuWmRXn2kuKggy1p45BbPnXOhyFGZlkJhoHO0iqrbWL5N8RWZ1JjviJrQo2QN5Iqo6q7hzbeCxAH2Ksvn+bgnZCGtBfjXejfOk+vKXxlBHMJh58= dawids@dawid-ms7d43"
+}
+
 resource "aws_instance" "cobudget" {
   ami                         = data.aws_ami.cobudget.id
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
@@ -63,6 +68,7 @@ resource "aws_instance" "cobudget" {
   user_data                   = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.cobudget_public.id
+  key_name                    = aws_key_pair.cobudget.key_name
 }
 
 resource "aws_ecs_cluster" "cobudget" {
@@ -75,7 +81,7 @@ data "aws_iam_policy_document" "ecs_task_execution_assume_role" {
 
     principals {
       type        = "Service"
-      identifiers = ["ecs.amazonaws.com"]
+      identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
 }
@@ -109,12 +115,17 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = aws_iam_policy.ecs_task_execution.arn
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_task_execution2" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.ecs_task_execution.name
+}
+
 resource "aws_ecs_task_definition" "cobudget" {
   execution_role_arn    = aws_iam_role.ecs_task_execution.arn
   container_definitions = jsonencode([
     {
       essential    = true
-      memory       = 512
+      memory       = 800
       name         = "cobudget"
       image        = "${aws_ecr_repository.aws_ecr_cobudget.repository_url}:latest"
       portMappings = [
@@ -154,4 +165,14 @@ resource "aws_ecs_task_definition" "cobudget" {
     }
   ])
   family = "cobudget"
+}
+
+resource "aws_ecs_service" "cobudget" {
+  name            = "cobudget"
+  cluster         = aws_ecs_cluster.cobudget.id
+  task_definition = aws_ecs_task_definition.cobudget.arn
+  desired_count   = 1
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
 }
