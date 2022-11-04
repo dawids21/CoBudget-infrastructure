@@ -19,3 +19,52 @@ resource "aws_security_group" "cobudget_ecs" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+data "aws_iam_policy_document" "ecs_agent" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ecs_agent" {
+  name               = "ecs-agent"
+  assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_agent" {
+  role       = aws_iam_role.ecs_agent.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_agent" {
+  name = "ecs-agent"
+  role = aws_iam_role.ecs_agent.name
+}
+
+data "aws_ami" "cobudget" {
+  owners      = ["amazon"]
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-ecs-hvm-*"]
+  }
+}
+
+resource "aws_instance" "cobudget" {
+  ami                         = data.aws_ami.cobudget.id
+  iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
+  vpc_security_group_ids      = [aws_security_group.cobudget_ecs.id]
+  instance_type               = "t2.micro"
+  user_data                   = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.cobudget_public.id
+}
+
+resource "aws_ecs_cluster" "cobudget" {
+  name = "my-cluster"
+}
