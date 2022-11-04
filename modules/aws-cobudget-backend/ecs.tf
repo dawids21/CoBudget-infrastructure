@@ -68,3 +68,16 @@ resource "aws_instance" "cobudget" {
 resource "aws_ecs_cluster" "cobudget" {
   name = "my-cluster"
 }
+
+resource "aws_ecs_task_definition" "cobudget" {
+  container_definitions = jsonencode([
+    {
+      essential   = true
+      memory      = 512
+      name        = "cobudget"
+      image       = "${aws_ecr_repository.aws_ecr_cobudget.repository_url}:latest"
+      environment = []
+    }
+  ])
+  family = "cobudget"
+}
