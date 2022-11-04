@@ -33,3 +33,21 @@ resource "aws_db_instance" "cobudget" {
   multi_az               = false
   skip_final_snapshot    = true
 }
+
+resource "aws_ssm_parameter" "cobudget_jdbc_database_url" {
+  name  = "cobudget-jdbc-database-url"
+  type  = "SecureString"
+  value = "${aws_db_instance.cobudget.endpoint}:5432/cobudget"
+}
+
+resource "aws_ssm_parameter" "cobudget_jdbc_database_username" {
+  name  = "cobudget-jdbc-database-username"
+  type  = "SecureString"
+  value = "cobudget"
+}
+
+resource "aws_ssm_parameter" "cobudget_jdbc_database_password" {
+  name  = "cobudget-jdbc-database-password"
+  type  = "SecureString"
+  value = var.db_password
+}

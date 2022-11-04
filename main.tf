@@ -27,7 +27,9 @@ module "okta_cobudget_iaas" {
 }
 
 module "aws_cobudget_backend" {
-  source      = "./modules/aws-cobudget-backend"
-  region      = var.aws_region
-  db_password = var.db_password
+  source       = "./modules/aws-cobudget-backend"
+  region       = var.aws_region
+  db_password  = var.db_password
+  frontend_url = "https://${var.app_domain}"
+  oauth_issuer = module.okta_cobudget_iaas.okta_issuer
 }
