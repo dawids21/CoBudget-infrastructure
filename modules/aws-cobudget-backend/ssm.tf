@@ -1,9 +1,3 @@
-resource "aws_ssm_parameter" "cobudget_app_port" {
-  name  = "cobudget-app-port"
-  type  = "String"
-  value = "8080"
-}
-
 resource "aws_ssm_parameter" "cobudget_cors_origins" {
   name  = "cobudget-cors-origins"
   type  = "String"
