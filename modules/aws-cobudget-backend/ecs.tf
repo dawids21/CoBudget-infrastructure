@@ -7,6 +7,12 @@ resource "aws_security_group" "cobudget_ecs" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port   = 443
     protocol    = "tcp"
     to_port     = 443
@@ -131,7 +137,7 @@ resource "aws_ecs_task_definition" "cobudget" {
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 443
+          hostPort      = 80
         }
       ]
       environment = [
@@ -168,10 +174,11 @@ resource "aws_ecs_task_definition" "cobudget" {
 }
 
 resource "aws_ecs_service" "cobudget" {
-  name            = "cobudget"
-  cluster         = aws_ecs_cluster.cobudget.id
-  task_definition = aws_ecs_task_definition.cobudget.arn
-  desired_count   = 1
+  name                               = "cobudget"
+  cluster                            = aws_ecs_cluster.cobudget.id
+  task_definition                    = aws_ecs_task_definition.cobudget.arn
+  desired_count                      = 1
+  deployment_minimum_healthy_percent = 0
   lifecycle {
     ignore_changes = [desired_count]
   }
