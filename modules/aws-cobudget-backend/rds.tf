@@ -17,7 +17,7 @@ resource "aws_security_group" "cobudget_rds" {
 
 resource "aws_db_subnet_group" "cobudget" {
   name       = "postgres-subnet-group"
-  subnet_ids = [aws_subnet.cobudget_private.id, aws_subnet.cobudget_private2.id]
+  subnet_ids = values(aws_subnet.cobudget_private)[*].id
 }
 
 resource "aws_db_instance" "cobudget" {

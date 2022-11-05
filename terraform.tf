@@ -27,7 +27,7 @@ terraform {
   cloud {
     organization = "dawids21"
     workspaces {
-      name = "CoBudget"
+      tags = ["cobudget"]
     }
   }
 }
@@ -37,18 +37,18 @@ provider "vercel" {
 }
 
 provider "heroku" {
-  email   = var.heroku_email
+  email   = module.vars.env["heroku_email"]
   api_key = var.heroku_api_key
 }
 
 provider "okta" {
-  org_name  = var.okta_org_name
-  base_url  = var.okta_base_url
+  org_name  = module.vars.env["okta_org_name"]
+  base_url  = module.vars.env["okta_base_url"]
   api_token = var.okta_api_token
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = module.vars.env["aws_region"]
 }
 
 provider "github" {

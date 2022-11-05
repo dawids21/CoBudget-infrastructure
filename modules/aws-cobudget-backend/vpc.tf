@@ -1,7 +1,5 @@
 resource "aws_vpc" "cobudget" {
-  cidr_block           = "10.0.0.0/22"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  cidr_block = var.vpc_cidr
 }
 
 resource "aws_internet_gateway" "cobudget" {
@@ -9,18 +7,15 @@ resource "aws_internet_gateway" "cobudget" {
 }
 
 resource "aws_subnet" "cobudget_public" {
+  for_each   = toset(var.vpc_cidr_public)
   vpc_id     = aws_vpc.cobudget.id
-  cidr_block = "10.0.0.0/24"
+  cidr_block = each.value
 }
 
 resource "aws_subnet" "cobudget_private" {
+  for_each   = toset(var.vpc_cidr_private)
   vpc_id     = aws_vpc.cobudget.id
-  cidr_block = "10.0.1.0/24"
-}
-
-resource "aws_subnet" "cobudget_private2" {
-  vpc_id     = aws_vpc.cobudget.id
-  cidr_block = "10.0.2.0/24"
+  cidr_block = each.value
 }
 
 resource "aws_route_table" "cobudget_public" {
@@ -32,8 +27,9 @@ resource "aws_route_table" "cobudget_public" {
 }
 
 resource "aws_route_table_association" "cobudget_public" {
+  for_each       = aws_subnet.cobudget_public
   route_table_id = aws_route_table.cobudget_public.id
-  subnet_id      = aws_subnet.cobudget_public.id
+  subnet_id      = each.value.id
 }
 
 resource "aws_route_table" "cobudget_private" {
@@ -41,11 +37,7 @@ resource "aws_route_table" "cobudget_private" {
 }
 
 resource "aws_route_table_association" "cobudget_private" {
+  for_each       = aws_subnet.cobudget_private
   route_table_id = aws_route_table.cobudget_private.id
-  subnet_id      = aws_subnet.cobudget_private.id
-}
-
-resource "aws_route_table_association" "cobudget_private2" {
-  route_table_id = aws_route_table.cobudget_private.id
-  subnet_id      = aws_subnet.cobudget_private2.id
+  subnet_id      = each.value.id
 }

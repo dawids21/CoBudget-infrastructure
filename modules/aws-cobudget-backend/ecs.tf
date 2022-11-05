@@ -73,7 +73,7 @@ resource "aws_instance" "cobudget" {
   instance_type               = "t2.micro"
   user_data                   = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.cobudget_public.id
+  subnet_id                   = aws_subnet.cobudget_public[var.vpc_cidr_public[0]].id
   key_name                    = aws_key_pair.cobudget.key_name
 }
 
