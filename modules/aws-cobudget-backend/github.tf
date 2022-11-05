@@ -1,38 +1,30 @@
-resource "github_repository" "cobudget" {
-  name                 = "CoBudget-backend"
-  allow_merge_commit   = true
-  allow_rebase_merge   = true
-  allow_squash_merge   = true
-  has_downloads        = true
-  has_issues           = true
-  has_projects         = true
-  has_wiki             = true
-  vulnerability_alerts = true
+data "github_repository" "cobudget" {
+  name = "CoBudget-backend"
 }
 
 resource "github_repository_environment" "cobudget" {
   environment = "cobudget-backend"
-  repository  = github_repository.cobudget.name
+  repository  = data.github_repository.cobudget.name
 }
 
 resource "github_actions_secret" "aws_access_key_id" {
-  repository      = github_repository.cobudget.name
+  repository      = data.github_repository.cobudget.name
   secret_name     = "AWS_ACCESS_KEY_ID"
   plaintext_value = aws_iam_access_key.github_actions.id
 }
 
 resource "github_actions_secret" "aws_access_key_secret" {
-  repository      = github_repository.cobudget.name
+  repository      = data.github_repository.cobudget.name
   secret_name     = "AWS_ACCESS_KEY_SECRET"
   plaintext_value = aws_iam_access_key.github_actions.secret
 }
 
 resource "github_repository_file" "cobudget_workflow_ecr" {
-  repository = github_repository.cobudget.name
+  repository = data.github_repository.cobudget.name
   file       = ".github/workflows/ecr.yml"
-  content = yamlencode({
+  content    = yamlencode({
     name = "Deploy to ECR"
-    on = {
+    on   = {
       push = {
         branches = ["main"]
       }
@@ -41,7 +33,7 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
       build = {
         name    = "Build Image"
         runs-on = "ubuntu-latest"
-        steps = [
+        steps   = [
           {
             name = "Configure AWS credentials"
             uses = "aws-actions/configure-aws-credentials@v1"
@@ -70,14 +62,14 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
           },
           {
             name = "Build image"
-            env = {
+            env  = {
               IMAGE_NAME = "$${{ steps.login-ecr.outputs.registry }}/${aws_ecr_repository.aws_ecr_cobudget.name}"
             }
             run = "./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
           },
           {
             name = "Push image to Amazon ECR"
-            env = {
+            env  = {
               ECR_REGISTRY   = "$${{ steps.login-ecr.outputs.registry }}"
               ECR_REPOSITORY = aws_ecr_repository.aws_ecr_cobudget.name
               IMAGE_TAG      = "latest"
