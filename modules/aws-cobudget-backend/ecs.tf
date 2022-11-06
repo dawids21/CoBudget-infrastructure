@@ -18,7 +18,7 @@ resource "aws_iam_role" "ecs_task_execution" {
   assume_role_policy = data.aws_iam_policy_document.ecs_task_execution_assume_role.json
 }
 
-data "aws_iam_policy_document" "ecs_task_execution" {
+data "aws_iam_policy_document" "ecs_cobudget_get_ssm" {
   statement {
     actions   = ["ssm:GetParameters"]
     resources = [
@@ -29,76 +29,18 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   }
 }
 
-resource "aws_iam_policy" "ecs_task_execution" {
-  name_prefix = "ecs-task-execution"
+resource "aws_iam_policy" "ecs_cobudget_get_ssm" {
+  name        = "ecs-cobudget-get-ssm"
   description = "Policy to get parameters from SSM"
-  policy      = data.aws_iam_policy_document.ecs_task_execution.json
+  policy      = data.aws_iam_policy_document.ecs_cobudget_get_ssm.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_cobudget_get_ssm" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ecs_cobudget_get_ssm.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = aws_iam_policy.ecs_task_execution.arn
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution2" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  role       = aws_iam_role.ecs_task_execution.name
-}
-
-resource "aws_ecs_task_definition" "cobudget" {
-  execution_role_arn    = aws_iam_role.ecs_task_execution.arn
-  container_definitions = jsonencode([
-    {
-      essential    = true
-      memory       = 800
-      name         = "cobudget"
-      image        = "${aws_ecr_repository.ecr_cobudget.repository_url}:latest"
-      portMappings = [
-        {
-          containerPort = 8080
-          hostPort      = 8080
-        }
-      ]
-      environment = [
-        {
-          name  = "APP_PORT"
-          value = "8080"
-        },
-        {
-          name  = "CORS_ORIGINS"
-          value = var.frontend_url
-        },
-        {
-          name  = "OAUTH_ISSUER"
-          value = var.oauth_issuer
-        },
-      ]
-      secrets = [
-        {
-          name      = "JDBC_DATABASE_URL"
-          valueFrom = aws_ssm_parameter.cobudget_jdbc_database_url.arn
-        },
-        {
-          name      = "JDBC_DATABASE_USERNAME"
-          valueFrom = aws_ssm_parameter.cobudget_jdbc_database_username.arn
-        },
-        {
-          name      = "JDBC_DATABASE_PASSWORD"
-          valueFrom = aws_ssm_parameter.cobudget_jdbc_database_password.arn
-        },
-      ]
-    }
-  ])
-  family = "cobudget"
-}
-
-resource "aws_ecs_service" "cobudget" {
-  name                               = "cobudget"
-  cluster                            = aws_ecs_cluster.cobudget.id
-  task_definition                    = aws_ecs_task_definition.cobudget.arn
-  desired_count                      = 1
-  deployment_minimum_healthy_percent = 0
-  lifecycle {
-    ignore_changes = [desired_count]
-  }
 }
