@@ -22,13 +22,14 @@ terraform {
     }
   }
 
-  required_version = "~> 1.3.0"
+  required_version = "~> 1.0"
 
-  cloud {
-    organization = "dawids21"
-    workspaces {
-      tags = ["cobudget"]
-    }
+  backend "s3" {
+    bucket         = "dawids21free-terraform-state"
+    key            = "terraform/cobudget/terraform.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "TerraformStateLocks"
+    encrypt        = true
   }
 }
 
