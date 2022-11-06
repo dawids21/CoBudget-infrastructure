@@ -24,6 +24,11 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "backend_url" {
+  description = "URL of the backend app"
+  type        = string
+}
+
 variable "frontend_url" {
   description = "URL of the frontend app"
   type        = string

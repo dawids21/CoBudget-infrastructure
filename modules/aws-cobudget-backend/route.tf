@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "cobudget" {
-  name    = "cobudget-backend.stasiak.xyz"
+  name    = var.backend_url
   comment = "Zone for CoBudget backend"
 }
 

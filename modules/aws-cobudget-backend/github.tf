@@ -63,7 +63,7 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
           {
             name = "Build image"
             env  = {
-              IMAGE_NAME = "$${{ steps.login-ecr.outputs.registry }}/${aws_ecr_repository.aws_ecr_cobudget.name}"
+              IMAGE_NAME = "$${{ steps.login-ecr.outputs.registry }}/${aws_ecr_repository.ecr_cobudget.name}"
             }
             run = "./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
           },
@@ -71,7 +71,7 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
             name = "Push image to Amazon ECR"
             env  = {
               ECR_REGISTRY   = "$${{ steps.login-ecr.outputs.registry }}"
-              ECR_REPOSITORY = aws_ecr_repository.aws_ecr_cobudget.name
+              ECR_REPOSITORY = aws_ecr_repository.ecr_cobudget.name
               IMAGE_TAG      = "latest"
             }
             run = "docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"

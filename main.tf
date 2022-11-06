@@ -31,6 +31,7 @@ module "aws_cobudget_backend" {
   region           = module.vars.env["aws_region"]
   db_password      = var.db_password
   frontend_url     = "https://${module.vars.env["app_domain"]}"
+  backend_url      = module.vars.env["app_backend_domain"]
   oauth_issuer     = module.okta_cobudget_iaas.okta_issuer
   vpc_cidr         = module.vars.env["aws_vpc_cidr"]
   vpc_cidr_public  = module.vars.env["aws_vpc_cidr_public"]

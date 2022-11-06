@@ -1,4 +1,5 @@
 resource "aws_security_group" "cobudget_rds" {
+  name   = "cobudget-rds"
   vpc_id = aws_vpc.cobudget.id
   ingress {
     from_port       = 5432
@@ -13,10 +14,13 @@ resource "aws_security_group" "cobudget_rds" {
     to_port     = 65535
     cidr_blocks = ["0.0.0.0/0"]
   }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_db_subnet_group" "cobudget" {
-  name       = "postgres-subnet-group"
+  name       = "cobudget-db-subnet-group"
   subnet_ids = values(aws_subnet.cobudget_private)[*].id
 }
 
@@ -43,11 +47,11 @@ resource "aws_ssm_parameter" "cobudget_jdbc_database_url" {
 resource "aws_ssm_parameter" "cobudget_jdbc_database_username" {
   name  = "cobudget-jdbc-database-username"
   type  = "SecureString"
-  value = "cobudget"
+  value = aws_db_instance.cobudget.username
 }
 
 resource "aws_ssm_parameter" "cobudget_jdbc_database_password" {
   name  = "cobudget-jdbc-database-password"
   type  = "SecureString"
-  value = var.db_password
+  value = aws_db_instance.cobudget.password
 }
