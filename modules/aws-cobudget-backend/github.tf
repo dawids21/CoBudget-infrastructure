@@ -7,16 +7,38 @@ resource "github_repository_environment" "cobudget" {
   repository  = data.github_repository.cobudget.name
 }
 
-resource "github_actions_secret" "aws_access_key_id" {
-  repository      = data.github_repository.cobudget.name
-  secret_name     = "AWS_ACCESS_KEY_ID"
-  plaintext_value = aws_iam_access_key.github_actions.id
+data "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
 }
 
-resource "github_actions_secret" "aws_access_key_secret" {
-  repository      = data.github_repository.cobudget.name
-  secret_name     = "AWS_ACCESS_KEY_SECRET"
-  plaintext_value = aws_iam_access_key.github_actions.secret
+data "aws_iam_policy_document" "github_actions_assume_role" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:dawids21/CoBudget-backend:*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions" {
+  name               = "github-actions"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_ecr_cobudget_upload" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.ecr_cobudget.arn
 }
 
 resource "github_repository_file" "cobudget_workflow_ecr" {
@@ -31,16 +53,19 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
     }
     jobs = {
       build = {
-        name    = "Build Image"
-        runs-on = "ubuntu-latest"
-        steps   = [
+        name        = "Build Image"
+        runs-on     = "ubuntu-latest"
+        permissions = {
+          id-token = "write"
+          contents = "read"
+        }
+        steps = [
           {
             name = "Configure AWS credentials"
             uses = "aws-actions/configure-aws-credentials@v1"
             with = {
-              aws-access-key-id     = "$${{ secrets.AWS_ACCESS_KEY_ID }}"
-              aws-region            = var.region
-              aws-secret-access-key = "$${{ secrets.AWS_ACCESS_KEY_SECRET }}"
+              role-to-assume = aws_iam_role.github_actions.arn
+              aws-region     = var.region
             }
           },
           {
