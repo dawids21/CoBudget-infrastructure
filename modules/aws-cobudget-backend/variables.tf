@@ -38,3 +38,13 @@ variable "oauth_issuer" {
   description = "Issuer URL for OAuth2"
   type        = string
 }
+
+variable "cluster_name" {
+  description = "Name for the ECS cluster"
+  type        = string
+}
+
+variable "env" {
+  description = "Current environment"
+  type        = string
+}

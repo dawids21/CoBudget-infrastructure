@@ -28,6 +28,7 @@ module "okta_cobudget_iaas" {
 
 module "aws_cobudget_backend" {
   source           = "./modules/aws-cobudget-backend"
+  env              = terraform.workspace
   region           = module.vars.env["aws_region"]
   db_password      = var.db_password
   frontend_url     = "https://${module.vars.env["app_domain"]}"
@@ -36,6 +37,7 @@ module "aws_cobudget_backend" {
   vpc_cidr         = module.vars.env["aws_vpc_cidr"]
   vpc_cidr_public  = module.vars.env["aws_vpc_cidr_public"]
   vpc_cidr_private = module.vars.env["aws_vpc_cidr_private"]
+  cluster_name     = module.vars.env["aws_cluster_name"]
 }
 
 module "vars" {

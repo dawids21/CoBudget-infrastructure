@@ -55,3 +55,11 @@ resource "aws_ecs_service" "cobudget" {
     ignore_changes = [desired_count]
   }
 }
+
+resource "local_file" "cobudget_deploy" {
+  filename = "scripts/deploy-${var.env}.sh"
+  content  = <<EOF
+#!/usr/bin/env bash
+aws ecs update-service --cluster ${aws_ecs_cluster.cobudget.name} --service ${aws_ecs_service.cobudget.name} --force-new-deployment
+  EOF
+}

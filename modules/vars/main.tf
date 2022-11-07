@@ -12,6 +12,7 @@ locals {
       aws_vpc_cidr         = "10.0.0.0/22"
       aws_vpc_cidr_public  = ["10.0.0.0/24"]
       aws_vpc_cidr_private = ["10.0.1.0/24", "10.0.2.0/24"]
+      aws_cluster_name     = "my-cluster"
     }
   }
   environment = contains(keys(local.env), var.environment) ? var.environment : "default"

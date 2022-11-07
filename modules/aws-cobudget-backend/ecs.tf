@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "cobudget" {
-  name = "my-cluster"
+  name = var.cluster_name
 }
 
 data "aws_iam_policy_document" "ecs_task_execution_assume_role" {
