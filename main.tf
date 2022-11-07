@@ -7,13 +7,6 @@ module "vercel_cobudget_frontend" {
   backend_url    = "https://cobudget-backend.stasiak.xyz/"
 }
 
-module "heroku_cobudget_backend" {
-  source = "./modules/heroku-cobudget-backend"
-
-  frontend_url = "https://${module.vars.env["app_domain"]}"
-  oauth_issuer = module.okta_cobudget_iaas.okta_issuer
-}
-
 module "okta_cobudget_iaas" {
   source = "./modules/okta-cobudget-iaas"
 
