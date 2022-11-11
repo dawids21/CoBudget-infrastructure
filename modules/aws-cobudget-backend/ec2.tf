@@ -39,6 +39,10 @@ data "aws_ami" "cobudget" {
     name   = "name"
     values = ["amzn2-ami-ecs-hvm-*"]
   }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
 }
 
 resource "aws_key_pair" "cobudget" {
@@ -55,4 +59,7 @@ resource "aws_instance" "cobudget" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.cobudget_public[var.vpc_cidr_public[0]].id
   key_name                    = aws_key_pair.cobudget.key_name
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }

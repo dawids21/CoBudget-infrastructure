@@ -2,11 +2,6 @@ data "github_repository" "cobudget" {
   name = "CoBudget-backend"
 }
 
-resource "github_repository_environment" "cobudget" {
-  environment = "cobudget-backend"
-  repository  = data.github_repository.cobudget.name
-}
-
 data "aws_iam_openid_connect_provider" "github" {
   url = "https://token.actions.githubusercontent.com"
 }
