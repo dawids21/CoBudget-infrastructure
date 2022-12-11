@@ -85,7 +85,7 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
             env  = {
               IMAGE_NAME = "$${{ steps.login-ecr.outputs.registry }}/${aws_ecr_repository.ecr_cobudget.name}"
             }
-            run = "./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
+            run = "SPRING_PROFILES_ACTIVE=dev ./mvnw -Pnative spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
           },
           {
             name = "Push image to Amazon ECR"
