@@ -20,7 +20,7 @@ resource "aws_iam_role" "ecs_task_execution" {
 
 data "aws_iam_policy_document" "ecs_cobudget_get_ssm" {
   statement {
-    actions   = ["ssm:GetParameters"]
+    actions = ["ssm:GetParameters"]
     resources = [
       aws_ssm_parameter.cobudget_jdbc_database_url.arn,
       aws_ssm_parameter.cobudget_jdbc_database_username.arn,

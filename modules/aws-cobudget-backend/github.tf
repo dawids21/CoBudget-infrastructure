@@ -39,17 +39,21 @@ resource "aws_iam_role_policy_attachment" "github_actions_ecr_cobudget_upload" {
 resource "github_repository_file" "cobudget_workflow_ecr" {
   repository = data.github_repository.cobudget.name
   file       = ".github/workflows/ecr.yml"
-  content    = yamlencode({
+  content = yamlencode({
     name = "Deploy to ECR"
-    on   = {
+    on = {
       push = {
         branches = ["main"]
       }
     }
+    concurrency = {
+      group              = "$${{ github.workflow }}-$${{ github.event.pull_request.number || github.ref }}"
+      cancel-in-progress = true
+    }
     jobs = {
       build = {
-        name        = "Build Image"
-        runs-on     = "ubuntu-latest"
+        name    = "Build Image"
+        runs-on = "ubuntu-latest"
         permissions = {
           id-token = "write"
           contents = "read"
@@ -78,18 +82,19 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
             with = {
               distribution = "adopt"
               java-version = 17
+              cache        = "maven"
             }
           },
           {
             name = "Build image"
-            env  = {
+            env = {
               IMAGE_NAME = "$${{ steps.login-ecr.outputs.registry }}/${aws_ecr_repository.ecr_cobudget.name}"
             }
-            run = "SPRING_PROFILES_ACTIVE=dev ./mvnw -Pnative spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
+            run = "SPRING_PROFILES_ACTIVE=native ./mvnw -Pnative spring-boot:build-image -Dspring-boot.build-image.imageName=$IMAGE_NAME"
           },
           {
             name = "Push image to Amazon ECR"
-            env  = {
+            env = {
               ECR_REGISTRY   = "$${{ steps.login-ecr.outputs.registry }}"
               ECR_REPOSITORY = aws_ecr_repository.ecr_cobudget.name
               IMAGE_TAG      = "latest"

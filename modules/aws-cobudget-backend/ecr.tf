@@ -33,12 +33,12 @@ resource "aws_iam_policy" "ecr_cobudget" {
 
 resource "aws_ecr_lifecycle_policy" "cobudget" {
   repository = aws_ecr_repository.ecr_cobudget.name
-  policy     = jsonencode({
+  policy = jsonencode({
     rules = [
       {
         rulePriority = 1
         description  = "Keep only the newest images of CoBudget"
-        selection    = {
+        selection = {
           tagStatus   = "untagged"
           countType   = "imageCountMoreThan"
           countNumber = 2

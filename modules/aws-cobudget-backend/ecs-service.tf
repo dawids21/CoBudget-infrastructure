@@ -1,11 +1,11 @@
 resource "aws_ecs_task_definition" "cobudget" {
-  execution_role_arn    = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
   container_definitions = jsonencode([
     {
-      essential    = true
-      memory       = 400
-      name         = "cobudget"
-      image        = "${aws_ecr_repository.ecr_cobudget.repository_url}:latest"
+      essential = true
+      memory    = 400
+      name      = "cobudget"
+      image     = "${aws_ecr_repository.ecr_cobudget.repository_url}:latest"
       portMappings = [
         {
           containerPort = 8080
