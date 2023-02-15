@@ -27,6 +27,7 @@ module "aws_cobudget_backend" {
   frontend_url     = "https://${module.vars.env["app_domain"]}"
   backend_url      = module.vars.env["app_backend_domain"]
   oauth_issuer     = module.okta_cobudget_iaas.okta_issuer
+  oauth_client_id  = module.okta_cobudget_iaas.okta_client_id
   vpc_cidr         = module.vars.env["aws_vpc_cidr"]
   vpc_cidr_public  = module.vars.env["aws_vpc_cidr_public"]
   vpc_cidr_private = module.vars.env["aws_vpc_cidr_private"]
