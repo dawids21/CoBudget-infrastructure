@@ -39,6 +39,11 @@ variable "oauth_issuer" {
   type        = string
 }
 
+variable "oauth_client_id" {
+  description = "Client ID for OAuth2 for Swagger UI"
+  type        = string
+}
+
 variable "cluster_name" {
   description = "Name for the ECS cluster"
   type        = string
