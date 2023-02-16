@@ -3,7 +3,7 @@ resource "aws_ecs_task_definition" "cobudget" {
   container_definitions = jsonencode([
     {
       essential    = true
-      memory       = 400
+      memory       = 800
       name         = "cobudget"
       image        = "${aws_ecr_repository.ecr_cobudget.repository_url}:latest"
       portMappings = [
