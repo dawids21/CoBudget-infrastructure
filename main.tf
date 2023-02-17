@@ -12,7 +12,9 @@ module "okta_cobudget_iaas" {
 
   redirect_uris = [
     "https://cobudget.stasiak.xyz/login/callback",
-    "http://localhost:3000/login/callback"
+    "http://localhost:3000/login/callback",
+    "http://${module.vars.env["app_backend_domain"]}/swagger-ui/oauth2-redirect.html",
+    "https://${module.vars.env["app_backend_domain"]}/swagger-ui/oauth2-redirect.html"
   ]
   post_logout_redirect_uris = ["http://localhost:3000", "https://cobudget.stasiak.xyz"]
   logo_path                 = "./logo.png"
