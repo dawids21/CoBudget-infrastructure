@@ -17,7 +17,7 @@ resource "okta_app_oauth" "oauth" {
 }
 
 resource "okta_group" "oauth" {
-  name = "CoBudget-prod"
+  name = "CoBudget-users"
 }
 
 resource "okta_app_group_assignment" "oauth" {
