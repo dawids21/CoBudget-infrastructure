@@ -21,7 +21,7 @@ resource "okta_app_oauth" "oauth" {
 }
 
 resource "okta_group" "oauth" {
-  name = "${local.group_prefix}users"
+  name = "${local.group_prefix}user"
 }
 
 resource "okta_app_group_assignment" "oauth" {
