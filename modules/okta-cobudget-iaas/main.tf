@@ -1,3 +1,7 @@
+locals {
+  group_prefix = "CoBudget-"
+}
+
 resource "okta_app_oauth" "oauth" {
   label = "CoBudget"
   type  = "browser"
@@ -17,7 +21,7 @@ resource "okta_app_oauth" "oauth" {
 }
 
 resource "okta_group" "oauth" {
-  name = "CoBudget-users"
+  name = "${local.group_prefix}users"
 }
 
 resource "okta_app_group_assignment" "oauth" {
@@ -42,4 +46,13 @@ resource "okta_auth_server_default" "oauth" {
   name                      = "default"
   audiences                 = ["api://default"]
   credentials_rotation_mode = "AUTO"
+}
+
+resource "okta_auth_server_claim" "cobudget_roles" {
+  auth_server_id    = okta_auth_server_default.oauth.id
+  claim_type        = "RESOURCE"
+  name              = "roles"
+  value             = local.group_prefix
+  value_type        = "GROUPS"
+  group_filter_type = "STARTS_WITH"
 }
