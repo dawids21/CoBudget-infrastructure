@@ -26,8 +26,8 @@ resource "okta_app_group_assignment" "oauth" {
 }
 
 resource "okta_user" "admin" {
-  email      = "cobudget.prod@stasiak.xyz"
-  login      = "cobudget.prod@stasiak.xyz"
+  email      = "cobudget@stasiak.xyz"
+  login      = "cobudget@stasiak.xyz"
   first_name = "Super"
   last_name  = "User"
   password   = var.prod_user_password
