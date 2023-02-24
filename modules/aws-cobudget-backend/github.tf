@@ -36,6 +36,11 @@ resource "aws_iam_role_policy_attachment" "github_actions_ecr_cobudget_upload" {
   policy_arn = aws_iam_policy.ecr_cobudget.arn
 }
 
+resource "aws_iam_role_policy_attachment" "github_actions_ecs_cobudget_deploy" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.ecs_cobudget_deploy.arn
+}
+
 resource "github_repository_file" "cobudget_workflow_ecr" {
   repository = data.github_repository.cobudget.name
   file       = ".github/workflows/ecr.yml"
@@ -100,6 +105,14 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
               IMAGE_TAG      = "latest"
             }
             run = "docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          },
+          {
+            name = "Deploy new container on ECS"
+            env  = {
+              ECS_CLUSTER = aws_ecs_cluster.cobudget.name
+              ECS_SERVICE = aws_ecs_service.cobudget.name
+            }
+            run = "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment"
           },
         ]
       }
