@@ -101,6 +101,14 @@ resource "github_repository_file" "cobudget_workflow_ecr" {
             }
             run = "docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           },
+          {
+            name = "Deploy new container on ECS"
+            env  = {
+              ECS_CLUSTER = aws_ecs_cluster.cobudget.name
+              ECS_SERVICE = aws_ecs_service.cobudget.name
+            }
+            run = "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment"
+          },
         ]
       }
     }
