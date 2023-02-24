@@ -36,6 +36,11 @@ resource "aws_iam_role_policy_attachment" "github_actions_ecr_cobudget_upload" {
   policy_arn = aws_iam_policy.ecr_cobudget.arn
 }
 
+resource "aws_iam_role_policy_attachment" "github_actions_ecs_cobudget_deploy" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.ecs_cobudget_deploy.arn
+}
+
 resource "github_repository_file" "cobudget_workflow_ecr" {
   repository = data.github_repository.cobudget.name
   file       = ".github/workflows/ecr.yml"

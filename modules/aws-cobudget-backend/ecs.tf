@@ -44,3 +44,18 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+data "aws_iam_policy_document" "ecs_cobudget_deploy" {
+  statement {
+    actions = ["ecs:UpdateService"]
+    resources = [
+      aws_ecs_service.cobudget.id
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ecs_cobudget_deploy" {
+  name        = "ecs-cobudget-deploy"
+  description = "Policy to deploy service on ECS"
+  policy      = data.aws_iam_policy_document.ecs_cobudget_deploy.json
+}
