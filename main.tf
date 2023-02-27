@@ -26,7 +26,7 @@ module "aws_cobudget_backend" {
   env              = terraform.workspace
   region           = module.vars.env["aws_region"]
   db_password      = var.db_password
-  frontend_url     = "https://${module.vars.env["app_domain"]}"
+  frontend_url     = "https://${module.vars.env["app_domain"]}, http://localhost:3000"
   backend_url      = module.vars.env["app_backend_domain"]
   oauth_issuer     = module.okta_cobudget_iaas.okta_issuer
   oauth_client_id  = module.okta_cobudget_iaas.okta_client_id
