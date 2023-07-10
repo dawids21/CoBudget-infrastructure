@@ -4,12 +4,6 @@ variable "vercel_api_token" {
   sensitive   = true
 }
 
-variable "heroku_api_key" {
-  description = "API key to authenticate Heroku API"
-  type        = string
-  sensitive   = true
-}
-
 variable "okta_api_token" {
   description = "Token for Okta API"
   type        = string
@@ -28,8 +22,8 @@ variable "github_token" {
   sensitive   = true
 }
 
-variable "db_password" {
-  description = "Password to DB"
+variable "registry_password" {
+  description = "Password for the private registry"
   type        = string
   sensitive   = true
 }

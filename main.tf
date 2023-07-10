@@ -21,19 +21,10 @@ module "okta_cobudget_iaas" {
   prod_user_password        = var.okta_prod_user_password
 }
 
-module "aws_cobudget_backend" {
-  source           = "./modules/aws-cobudget-backend"
-  env              = terraform.workspace
-  region           = module.vars.env["aws_region"]
-  db_password      = var.db_password
-  frontend_url     = "https://${module.vars.env["app_domain"]}, http://localhost:3000"
-  backend_url      = module.vars.env["app_backend_domain"]
-  oauth_issuer     = module.okta_cobudget_iaas.okta_issuer
-  oauth_client_id  = module.okta_cobudget_iaas.okta_client_id
-  vpc_cidr         = module.vars.env["aws_vpc_cidr"]
-  vpc_cidr_public  = module.vars.env["aws_vpc_cidr_public"]
-  vpc_cidr_private = module.vars.env["aws_vpc_cidr_private"]
-  cluster_name     = module.vars.env["aws_cluster_name"]
+module "cobudget_backend" {
+  source            = "./modules/cobudget-backend"
+  registry_username = module.vars.env["registry_username"]
+  registry_password = var.registry_password
 }
 
 module "vars" {
